@@ -1,4 +1,7 @@
-var arr = [23, 38, 12, 9, 45, 7]
+const arrBackup = [...arr]
+const speed = 300
+let arr = [23, 38, 12, 9, 45, 7]
+let count = 1
 
 function updateDom (arr) {
     var wrapper = $(".wrapper")
@@ -8,27 +11,72 @@ function updateDom (arr) {
     })
 }
 
-updateDom(arr)
 
-let count = 1
-
-function handleDelay (arr) {
+function handleDelayUpdate (arr) {
     setTimeout(function () {
         updateDom(arr)
-    }, (count++) * 1000)
+    }, (count++) * speed)
 }
 
-const length = arr.length
-
-for (let i = length - 1; i >  0; i--) {
-    for (let j = 0; j < i; j++) {
-      if (arr[j] > arr[j + 1]) {
-        const temp = arr[j]
-        arr[j] = arr[j + 1]
-        arr[j + 1] = temp
-        handleDelay([...arr])
-      }
+function startSort () {
+    for (let i = arr.length - 1; i >  0; i--) {
+        for (let j = 0; j < i; j++) {
+            showComparation(j, j + 1)
+            if (arr[j] > arr[j + 1]) {
+                const temp = arr[j]
+                arr[j] = arr[j + 1]
+                arr[j + 1] = temp
+                handleDelayUpdate([...arr])
+            }
+        }
     }
+    setTimeout(function () {
+        window.alert('排序结束！')
+    }, (count++) * speed)
 }
 
-console.log(arr)
+function showComparation (first, second) {
+    showTwoCompareItem (first, second, 'yellow')
+    showTwoCompareItem (first, second, '')
+
+    const bigger = arr[first] > arr[second] ? first : second
+    showBiggerItem (bigger, 'red')
+    showBiggerItem (bigger, '')
+}
+
+function showTwoCompareItem (first, second, color) {
+    setTimeout(function () {
+        setBackgroundColor(first, color)
+        setBackgroundColor(second, color)
+    }, (count++) * speed)
+}
+
+function showBiggerItem (index, color) {
+    setTimeout(function () {
+        setBackgroundColor(index, color)
+    }, (count++) * speed)
+}
+
+function setBackgroundColor (i, color) {
+    const index = i + 1
+    $('.wrapper .item:nth-child(' + index + ')').css('background-color', color)
+}
+
+function initEvent () {
+    $('.operate .sort').on('click', function () {
+        count = 1
+        startSort()
+    })
+
+    $('.operate .reset').on('click', function () {
+        arr = [...arrBackup]
+        updateDom(arr)
+    })
+}
+
+function main () {
+    updateDom(arr)
+    initEvent()
+}
+
+main()

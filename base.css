@@ -12,3 +12,11 @@
   justify-content: center;
   align-items: flex-end;
 }
+.operate {
+  display: flex;
+  justify-content: center;
+  margin-top: 70px;
+}
+.operate button {
+  margin-right: 10px;
+}
