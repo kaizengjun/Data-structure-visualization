@@ -1,7 +1,11 @@
-const arrBackup = [...arr]
-const speed = 300
+/*
+    todo: 将排序过程和显示分离，使用数组保存每次排序后的状态
+*/
+
+const speed = 200
 let arr = [23, 38, 12, 9, 45, 7]
 let count = 1
+let arrBackup = arr.slice()
 
 function updateDom (arr) {
     var wrapper = $(".wrapper")
@@ -69,7 +73,7 @@ function initEvent () {
     })
 
     $('.operate .reset').on('click', function () {
-        arr = [...arrBackup]
+        arr = arrBackup.slice()
         updateDom(arr)
     })
 }
