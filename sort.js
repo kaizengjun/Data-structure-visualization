@@ -2,10 +2,11 @@
     todo: 将排序过程和显示分离，使用数组保存每次排序后的状态
 */
 
-const speed = 200
+const speed = 100
 let arr = [23, 38, 12, 9, 45, 7]
 let count = 1
 let arrBackup = arr.slice()
+let timeoutArr = []
 
 function updateDom (arr) {
     var wrapper = $(".wrapper")
@@ -15,11 +16,14 @@ function updateDom (arr) {
     })
 }
 
-
 function handleDelayUpdate (arr) {
-    setTimeout(function () {
+    handleDelayShow(function () {
         updateDom(arr)
-    }, (count++) * speed)
+    })
+}
+
+function handleDelayShow (cb) {
+    timeoutArr.push(setTimeout(cb, (count++) * speed))
 }
 
 function startSort () {
@@ -34,9 +38,9 @@ function startSort () {
             }
         }
     }
-    setTimeout(function () {
+    handleDelayShow(function () {
         window.alert('排序结束！')
-    }, (count++) * speed)
+    })
 }
 
 function showComparation (first, second) {
@@ -49,16 +53,16 @@ function showComparation (first, second) {
 }
 
 function showTwoCompareItem (first, second, color) {
-    setTimeout(function () {
+    handleDelayShow(function () {
         setBackgroundColor(first, color)
         setBackgroundColor(second, color)
-    }, (count++) * speed)
+    })
 }
 
 function showBiggerItem (index, color) {
-    setTimeout(function () {
+    handleDelayShow(function () {
         setBackgroundColor(index, color)
-    }, (count++) * speed)
+    })
 }
 
 function setBackgroundColor (i, color) {
@@ -73,6 +77,9 @@ function initEvent () {
     })
 
     $('.operate .reset').on('click', function () {
+        for (let timeoutID of timeoutArr) {
+            clearTimeout(timeoutID)
+        }
         arr = arrBackup.slice()
         updateDom(arr)
     })
